@@ -1,8 +1,9 @@
-# main.py
 import pandas as pd
 import csv
 from datetime import datetime
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
+
 from data_entry import get_date, get_pressure_reading, process_data, get_description
 
 class CSV:
@@ -90,7 +91,9 @@ def add():
     else:
         print("Invalid choice. Enter 1 or 2.")
 
-def plot_pressure(df):
+
+# def plot_pressure(df):
+## This will show by each date
     if 'heart_rate' in df.columns:
         plt.figure(figsize=(12, 6))
         plt.plot(df['date'], df['systolic'], label='Systolic')
@@ -104,6 +107,180 @@ def plot_pressure(df):
         plt.show()
     else:
         print("Heart rate data not available in the provided DataFrame.")
+
+
+# def plot_pressure(df):
+## This will show by month1 
+    if 'heart_rate' in df.columns:
+        plt.figure(figsize=(12, 6))
+
+        # Convert 'date' to datetime if it's not already
+        df['date'] = pd.to_datetime(df['date'], format=CSV.FORMAT)
+
+        # Plot the data
+        plt.plot(df['date'], df['systolic'], label='Systolic')
+        plt.plot(df['date'], df['diastolic'], label='Diastolic')
+        plt.plot(df['date'], df['heart_rate'], label='Heart Rate')
+
+        # Format the x-axis to show months
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b %Y'))  # e.g., "Jan 2024"
+        plt.gca().xaxis.set_major_locator(mdates.MonthLocator())  # Major ticks on the first of each month
+
+        # Rotate the labels for better readability
+        plt.gcf().autofmt_xdate()
+
+        # Add labels, title, legend, and grid
+        plt.xlabel('Date')
+        plt.ylabel('Pressure (mmHg) / Heart Rate (bpm)')
+        plt.title('Systolic, Diastolic Pressure and Heart Rate Over Time')
+        plt.legend()
+        plt.grid(True)
+
+        # Display the plot
+        plt.show()
+    else:
+        print("Heart rate data not available in the provided DataFrame.")
+
+
+# def plot_pressure(df):
+## This will show by month2
+    if 'heart_rate' in df.columns:
+        plt.figure(figsize=(12, 6))
+
+        # Convert 'date' to datetime if it's not already
+        df['date'] = pd.to_datetime(df['date'], format=CSV.FORMAT)
+
+        # Plot the data
+        plt.plot(df['date'], df['systolic'], label='Systolic')
+        plt.plot(df['date'], df['diastolic'], label='Diastolic')
+        plt.plot(df['date'], df['heart_rate'], label='Heart Rate')
+
+        # Set x-axis ticks dynamically based on the data
+        unique_months = df['date'].dt.to_period('M').drop_duplicates().to_timestamp()
+        plt.gca().set_xticks(unique_months)
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b %Y'))  # e.g., "Jan 2024"
+
+        # Rotate the labels for better readability
+        plt.gcf().autofmt_xdate()
+
+        # Add labels, title, legend, and grid
+        plt.xlabel('Date')
+        plt.ylabel('Pressure (mmHg) / Heart Rate (bpm)')
+        plt.title('Systolic, Diastolic Pressure and Heart Rate Over Time')
+        plt.legend()
+        plt.grid(True)
+
+        # Display the plot
+        plt.show()
+    else:
+        print("Heart rate data not available in the provided DataFrame.")
+
+# def plot_pressure(df):
+## This will show by month3
+    if 'heart_rate' in df.columns:
+        plt.figure(figsize=(12, 6))
+
+        # Convert 'date' to datetime if it's not already
+        df['date'] = pd.to_datetime(df['date'], format=CSV.FORMAT)
+
+        # Plot the data
+        plt.plot(df['date'], df['systolic'], label='Systolic')
+        plt.plot(df['date'], df['diastolic'], label='Diastolic')
+        plt.plot(df['date'], df['heart_rate'], label='Heart Rate')
+
+        # Find unique months with data
+        unique_months = df['date'].dt.to_period('M').unique()
+        unique_months = pd.Series(unique_months).dt.start_time
+
+        # Set x-axis ticks dynamically based on the unique months
+        plt.gca().set_xticks(unique_months)
+        plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b %Y'))  # e.g., "Jan 2024"
+
+        # Rotate the labels for better readability
+        plt.gcf().autofmt_xdate()
+
+        # Add labels, title, legend, and grid
+        plt.xlabel('Date')
+        plt.ylabel('Pressure (mmHg) / Heart Rate (bpm)')
+        plt.title('Systolic, Diastolic Pressure and Heart Rate Over Time')
+        plt.legend()
+        plt.grid(True)
+
+        # Display the plot
+        plt.show()
+    else:
+        print("Heart rate data not available in the provided DataFrame.")
+
+# def plot_pressure(df):
+## This will show by month4
+    if 'heart_rate' in df.columns:
+        plt.figure(figsize=(12, 6))
+
+        # Convert 'date' to datetime if it's not already
+        df['date'] = pd.to_datetime(df['date'], format=CSV.FORMAT)
+
+        # Extract month-year as a string for categorical plotting
+        df['month_year'] = df['date'].dt.strftime('%b %Y')  # e.g., "Jan 2024"
+
+        # Plot the data using the categorical x-axis
+        plt.plot(df['month_year'], df['systolic'], label='Systolic')
+        plt.plot(df['month_year'], df['diastolic'], label='Diastolic')
+        plt.plot(df['month_year'], df['heart_rate'], label='Heart Rate')
+
+        # Configure the plot
+        plt.xlabel('Month')
+        plt.ylabel('Pressure (mmHg) / Heart Rate (bpm)')
+        plt.title('Systolic, Diastolic Pressure and Heart Rate Over Time')
+        plt.legend()
+        plt.grid(True)
+
+        # Rotate the x-axis labels for readability
+        plt.xticks(rotation=45, ha='right')
+
+        # Display the plot
+        plt.tight_layout()  # Adjust layout to prevent overlap
+        plt.show()
+    else:
+        print("Heart rate data not available in the provided DataFrame.")
+
+
+def plot_pressure(df):
+    if 'heart_rate' in df.columns:
+        plt.figure(figsize=(12, 6))
+
+        # Convert 'date' to datetime if it's not already
+        df['date'] = pd.to_datetime(df['date'], format=CSV.FORMAT)
+
+        # Sort the data by date to ensure it goes from old to new
+        df = df.sort_values(by='date')
+
+        # Extract month-year as a string for categorical plotting
+        df['month_year'] = df['date'].dt.strftime('%b %Y')  # e.g., "Jan 2024"
+
+        # Plot the data using the categorical x-axis
+        plt.plot(df['month_year'], df['systolic'], label='Systolic')
+        plt.plot(df['month_year'], df['diastolic'], label='Diastolic')
+        plt.plot(df['month_year'], df['heart_rate'], label='Heart Rate')
+
+        # Configure the plot
+        plt.xlabel('Month')
+        plt.ylabel('Pressure (mmHg) / Heart Rate (bpm)')
+        plt.title('Systolic, Diastolic Pressure and Heart Rate Over Time')
+        plt.legend()
+        plt.grid(True)
+
+        # Rotate the x-axis labels for readability
+        plt.xticks(rotation=45, ha='right')
+
+        # Adjust layout to prevent overlap
+        plt.tight_layout()
+
+        # Display the plot
+        plt.show()
+    else:
+        print("Heart rate data not available in the provided DataFrame.")
+
+
 
 def main():
     while True:
